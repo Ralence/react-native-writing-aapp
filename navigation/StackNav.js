@@ -5,20 +5,17 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import ColorBox from "./components/ColorBox";
 import HomeScreen from "./screens/Home";
 import ColorPalette from "./screens/ColorPalette";
 
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Color Palette" component={ColorPalette} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Color Palette" component={ColorPalette} />
+    </Stack.Navigator>
   );
 }
 
@@ -28,15 +25,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     alignItems: "center",
   },
-  blue: {
-    backgroundColor: "blue",
-  },
-  magenta: {
-    backgroundColor: "magenta",
-  },
-  orange: {
-    backgroundColor: "orange",
-  },
   container: {
     backgroundColor: "teal",
     alignItems: "center",
@@ -45,13 +33,6 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 50,
   },
-  text: {
-    color: "white",
-    fontSize: 25,
-    alignSelf: "center",
-  },
-  list: {
-    width: "95%",
-    margin: 0,
-  },
 });
+
+export default App;
