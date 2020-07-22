@@ -3,7 +3,9 @@ import { Text, StyleSheet, SafeAreaView, FlatList } from "react-native";
 
 import ColorBox from "../components/ColorBox";
 
-const ColorPalette = ({ colors }) => {
+const ColorPalette = ({ route }) => {
+  const { colors, paletteName } = route.params;
+
   return (
     <SafeAreaView style={styles.page}>
       <Text
@@ -15,7 +17,7 @@ const ColorPalette = ({ colors }) => {
           textAlign: "center",
         }}
       >
-        Here are some boxes of different color
+        Here are some boxes of {paletteName} colors
       </Text>
       <FlatList
         keyExtractor={(item) => item.hexCode}
