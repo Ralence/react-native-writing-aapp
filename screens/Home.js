@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 
 const Home = ({ navigation }) => {
   const [COLOR_PALETTES, setCOLOR_PALETTES] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getColors = useCallback(async () => {
     try {
@@ -17,10 +18,16 @@ const Home = ({ navigation }) => {
     } catch (err) {
       console.log(err);
     }
-  });
+  }, []);
 
   useEffect(() => {
     getColors();
+  }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await getColors();
+    setRefreshing(false);
   }, []);
 
   return (
@@ -40,6 +47,8 @@ const Home = ({ navigation }) => {
             }
           />
         )}
+        refreshing={refreshing}
+        onRefresh={() => handleRefresh()}
       />
     </View>
   );
