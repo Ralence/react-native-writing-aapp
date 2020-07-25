@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, RefreshControl, Button } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const newColorPalette = route.params ? route.params.newColorPalette : null;
   const [COLOR_PALETTES, setCOLOR_PALETTES] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -24,6 +25,12 @@ const Home = ({ navigation }) => {
     getColors();
   }, []);
 
+  useEffect(() => {
+    if (newColorPalette) {
+      setCOLOR_PALETTES((COLOR_PALETTES) => [newColorPalette, ...COLOR_PALETTES]);
+    }
+  }, [newColorPalette]);
+
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await getColors();
@@ -37,7 +44,7 @@ const Home = ({ navigation }) => {
         data={COLOR_PALETTES}
         keyExtractor={(item) => item.paletteName}
         ListHeaderComponent={
-          <Button title="open modal" onPress={() => navigation.navigate("AddNewPalette")} />
+          <Button title="Add a color scheme" onPress={() => navigation.navigate("AddNewPalette")} />
         }
         renderItem={({ item }) => (
           <PreviewCard
