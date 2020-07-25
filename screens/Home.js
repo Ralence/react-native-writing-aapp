@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
+import { View, StyleSheet, FlatList, RefreshControl, Button } from "react-native";
 import PreviewCard from "../components/PreviewCard";
 
 const Home = ({ navigation }) => {
@@ -36,6 +36,9 @@ const Home = ({ navigation }) => {
         style={styles.list}
         data={COLOR_PALETTES}
         keyExtractor={(item) => item.paletteName}
+        ListHeaderComponent={
+          <Button title="open modal" onPress={() => navigation.navigate("AddNewPalette")} />
+        }
         renderItem={({ item }) => (
           <PreviewCard
             item={item}
