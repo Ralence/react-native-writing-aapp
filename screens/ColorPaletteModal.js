@@ -164,18 +164,40 @@ const ColorPaletteModal = ({ navigation }) => {
   const [name, setName] = useState("");
   const [colors, setColors] = useState([]);
 
+  const setSwitchValue = (element) => {
+    return colors.find((color) => color.colorName === element.colorName) ? true : false;
+  };
+
   const handleTextChange = useCallback((text) => setName(text), []);
   const handleSubmit = useCallback(() => {
     if (!name) {
       Alert.alert("Please enter a palette name!");
+    } else if (colors.length < 3) {
+      Alert.alert("Please select at least three colors!");
     } else {
       const newColorPalette = {
         paletteName: name,
-        colors: [],
+        colors: [...colors],
       };
       navigation.navigate("Home", { newColorPalette });
     }
-  }, [name]);
+  }, [name, colors]);
+
+  const handleToggleSelect = useCallback(
+    (val, selectedColor) => {
+      if (colors.find((color) => color.colorName === selectedColor.colorName) === undefined) {
+        setColors((colors) => {
+          return [...colors, selectedColor];
+        });
+      } else {
+        setColors((colors) => {
+          return colors.filter((color) => color.colorName !== selectedColor.colorName);
+        });
+      }
+    },
+    [colors]
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>Name of the palette</Text>
@@ -191,8 +213,11 @@ const ColorPaletteModal = ({ navigation }) => {
         renderItem={({ item }) => {
           return (
             <View style={styles.switchContainer}>
-              <Text>{item.colorName}</Text>
-              <Switch value={true} onValueChange={() => {}} />
+              <Text style={styles.switchText}>{item.colorName}</Text>
+              <Switch
+                value={setSwitchValue(item)}
+                onValueChange={(val) => handleToggleSelect(val, item)}
+              />
             </View>
           );
         }}
@@ -217,7 +242,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    marginBottom: 50,
+    marginBottom: 30,
   },
   inputLabel: {
     marginBottom: 10,
@@ -243,5 +268,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "grey",
     borderBottomWidth: 1,
+  },
+  switchText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
